@@ -2,6 +2,7 @@ using RigControlApi.Hubs;
 using RigControlApi.Hubs.Interfaces;
 using RigControlApi.Interfaces;
 using RigControlApi.Utilities;
+using RigControlApi.Utilities.Monitors;
 
 var builder = WebApplication.CreateBuilder(args);
 var allowedOrigin = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
@@ -25,6 +26,12 @@ builder.Services.AddSignalR();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddSingleton<IProcessCpuUsageFetcher, ProcessCpuUsageFetcher>(); 
 builder.Services.AddHostedService<ProcessCpuUsageFetcher>();
+// Add monitor services
+builder.Services.AddHostedService<CpuMonitor>();
+builder.Services.AddHostedService<GpuMonitor>();
+builder.Services.AddHostedService<NetworkMonitor>();
+builder.Services.AddHostedService<MemoryMonitor>();
+// Add utility services
 builder.Services.AddSingleton<HardwareUtility>();
 builder.Services.AddSingleton<ApplicationUtility>();
 builder.Services.AddEndpointsApiExplorer();
@@ -46,6 +53,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapHub<NetworkDataHub>("/networkDataHub");
+app.MapHub<HardwareHub>("/hardwareHub");
 
 app.Run();

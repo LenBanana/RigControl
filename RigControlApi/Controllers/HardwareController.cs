@@ -1,4 +1,5 @@
 ﻿using Hardware.Info;
+using LibreHardwareMonitor.Hardware;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RigControlApi.Utilities;
@@ -11,9 +12,11 @@ public class HardwareController : Controller
 {
     private readonly HardwareUtility _hardwareUtility;
 
-    public HardwareController(HardwareUtility hardwareUtility)
+    private readonly IServiceScopeFactory _serviceScope;
+    public HardwareController(HardwareUtility hardwareUtility,IServiceScopeFactory serviceScope)
     {
         _hardwareUtility = hardwareUtility;
+        _serviceScope = serviceScope;
     }
     
     [HttpGet]
@@ -58,9 +61,36 @@ public class HardwareController : Controller
         return Ok(_hardwareUtility.GetNetworkAdapterList(refresh));
     }
 
-    [HttpPost]
-    public IActionResult CpuMonitoring(string processorId)
+    [HttpGet]
+    public IActionResult GetAllSensorInfo()
     {
+        var computer = new Computer()
+        {
+            IsControllerEnabled = true,
+            IsMotherboardEnabled = true,
+            IsPsuEnabled = true
+        };
+        computer.Open();
+        foreach (var hardware in computer.Hardware)
+        {
+            hardware.Update();
+            Console.WriteLine("Hardware: {0}", hardware.Name);
+
+            foreach (var sensor in hardware.Sensors)
+            {
+                Console.WriteLine("\tSensor: {0}, value: {1}, type: {2}", sensor.Name, sensor.Value, sensor.SensorType);
+                foreach (var subHw in hardware.SubHardware)
+                {
+                    subHw.Update();
+                    Console.WriteLine("SubHardware: {0}", subHw.Name);
+                    foreach (var subSensor in subHw.Sensors)
+                    {
+                        Console.WriteLine("\tSensor: {0}, value: {1}, type: {2}", subSensor.Name, subSensor.Value, subSensor.SensorType);
+                    }
+                }
+            }
+        }
+
         return Ok();
     }
 }

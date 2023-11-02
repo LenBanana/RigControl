@@ -17,6 +17,7 @@
 
     <ItemGroup>
         <PackageReference Include="Hardware.Info" Version="100.0.0" />
+        <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.3-pre256" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.13"/>
         <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
@@ -26,6 +27,10 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Utilities\Hardware\" />
     </ItemGroup>
 
 </Project>

@@ -3,7 +3,7 @@ using RigControlApi.Hubs.Interfaces;
 
 namespace RigControlApi.Hubs;
 
-public class NetworkDataHub : Hub<INetworkDataHub>
+public class HardwareHub : Hub<IHardwareHub>
 {
     
 }
