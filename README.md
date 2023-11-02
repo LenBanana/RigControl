@@ -21,7 +21,7 @@ Rig Control API is a robust and extensible backend service designed to monitor a
 
 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/RigControlApi.git
+git clone https://github.com/LenBanana/RigControl.git
 ```
 2. Navigate to the project directory
 ```bash
