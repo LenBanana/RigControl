@@ -5,17 +5,18 @@ using RigControlApi.Utilities;
 using RigControlApi.Utilities.Monitors;
 
 var builder = WebApplication.CreateBuilder(args);
-var allowedOrigin = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
+var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Cors", policy =>
     {
-        if (allowedOrigin != null)
-            policy.WithOrigins(allowedOrigin)
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials();
+        policy.SetIsOriginAllowedToAllowWildcardSubdomains()
+            .SetIsOriginAllowed(_ => true)
+            .WithOrigins(allowedOrigins ?? Array.Empty<string>())
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
         ;
     });
 });
@@ -24,7 +25,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 builder.Services.AddSignalR();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddSingleton<IProcessCpuUsageFetcher, ProcessCpuUsageFetcher>(); 
+builder.Services.AddSingleton<IProcessCpuUsageFetcher, ProcessCpuUsageFetcher>();
 builder.Services.AddHostedService<ProcessCpuUsageFetcher>();
 // Add monitor services
 builder.Services.AddHostedService<CpuMonitor>();
