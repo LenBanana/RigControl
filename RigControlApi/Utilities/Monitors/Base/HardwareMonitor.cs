@@ -75,7 +75,12 @@ public abstract class HardwareMonitor : IDisposable, ISystemMonitor, IHostedServ
         }
         return new MonitorDto(Id)
         {
-            Data = _sensors.Select(sensor => new LabeledData(sensor.Key, sensor.Value?.Value ?? 0)).ToList()
+            Data = _sensors.Select(sensor =>
+            {
+                var value = sensor.Value?.Value;
+                if (value is null or float.NaN or < float.MinValue) value = 0;
+                return new LabeledData(sensor.Key, (double)value);
+            }).ToList()
         };
     }
 
