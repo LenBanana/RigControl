@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using RigControlApi.Hubs;
 using RigControlApi.Hubs.Interfaces;
 using RigControlApi.Interfaces;
@@ -22,7 +23,10 @@ builder.Services.AddCors(options =>
 });
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals;
+});
 builder.Services.AddSignalR();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddSingleton<IProcessCpuUsageFetcher, ProcessCpuUsageFetcher>();
