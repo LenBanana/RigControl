@@ -62,13 +62,19 @@ public class HardwareController : Controller
     }
 
     [HttpGet]
-    public IActionResult GetAllSensorInfo()
+    public IActionResult LogAllSensorInfo()
     {
         var computer = new Computer()
         {
-            IsControllerEnabled = true,
+            IsCpuEnabled = true,
+            IsGpuEnabled = true,
+            IsMemoryEnabled = true,
             IsMotherboardEnabled = true,
-            IsPsuEnabled = true
+            IsControllerEnabled = true,
+            IsNetworkEnabled = true,
+            IsStorageEnabled = true,
+            IsPsuEnabled = true,
+            IsBatteryEnabled = true
         };
         computer.Open();
         foreach (var hardware in computer.Hardware)
